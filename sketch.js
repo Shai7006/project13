@@ -1,114 +1,97 @@
-var garden,rabbit,apple,orangeL,redL;
-var gardenImg,rabbitImg,carrotImg,orangeImg,redImg;
-
+var b, enemyImage, ballImage, scene, ball, alien1, alien2, alien3, score=0, opscore=0, speed=5
 
 function preload(){
-  gardenImg = loadImage("garden.png");
-  rabbitImg = loadImage("rabbit.png");
-  appleImg = loadImage("apple.png");
-  orangeImg = loadImage("orangeLeaf.png");
-  redImg = loadImage("redImage.png");
+  
+  b = loadImage("b.png");
+  enemyImage = loadImage("alien.png");
+  ballImage = loadImage("ball.png");
+  
 }
 
 
-function setup(){
+
+function setup() {
+  createCanvas(400, 400);
   
-  createCanvas(400,400);
-// Moving background
-garden=createSprite(200,200);
-garden.addImage(gardenImg);
+  scene = createSprite(200,200);
+  scene.addImage(b)
+  ball = createSprite(200,345,200,345)
+  ball.addImage(ballImage)
+  ball.scale=0.1
+
+  alien1 = createSprite(200,280,10,10)
+  alien2 = createSprite(200,170,10,10)
+  alien3 = createSprite(200,50,10,10)
+  alien1.addImage(enemyImage)
+  alien2.addImage(enemyImage)
+  alien3.addImage(enemyImage)
+
+  alien1.scale=0.3
+  alien2.scale=0.3
+  alien3.scale=0.3
 
 
-//creating boy running
-rabbit = createSprite(160,340,20,20);
-rabbit.scale =0.09;
-rabbit.addImage(rabbitImg);
+  
+   score = 0    
 }
 
 function draw() {
-  background(0);
+ background(0);
+ createEdgeSprites()
+
+ alien1.x=alien1.x+speed
+ alien2.x=alien2.x-speed
+ alien3.x=alien3.x+speed
+
+ if(alien1.x<0 || alien1.x>width)
+ {
+   speed=speed*-1
+ }
+
+
+
+if(keyDown(UP_ARROW)){
+  ball.y=ball.y-3
+}
+
+if(keyDown(DOWN_ARROW)){
+  ball.y=ball.y+3
+}
+
+if(keyDown(LEFT_ARROW)){
+  ball.x=ball.x-3
+}
+
+if(keyDown(RIGHT_ARROW)){
+  ball.x=ball.x+3
+}
+
+if(ball.isTouching(alien1)|| ball.isTouching(alien2)|| ball.isTouching(alien3)){
+    ball.x=200
+  ball.y=350
+  opscore = opscore+1
+}
+if(ball.y<0){
+  ball.x=200
+  ball.y=345
+  score=score+1
+}
+
+
+drawSprites();
+textSize(15)
+  fill("Yellow")
+  text("Humans:"+score,328,30);
   
-  // boy moving on Xaxis with mouse'
-  rabbit.x = World.mouseX;
+
+textSize(15)
+  fill("Yellow")
+  text("Aliens:"+opscore,5,30);
   
-  edges= createEdgeSprites();
-  rabbit.collide(edges);
-  
-   drawSprites();
-   
-  
-// var select_sprites = Math(random(1,3));
 
-// var select_sprites = Math.random(random(1,3));
-
-// var select_sprites = Math.round(1,3);
-
- var select_sprites = Math.round(random(1,3));
-
-  
-  // if (frameCount % 50 == 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-  // if (frameCount % 80 == 0) {
-  //  if (select_sprites == 1) {
- //   createApples();
- //  } else if (select_sprites == 2) {
-  //   createOrange();
-  // }
-  // }
-
-  // if (frameCount / 80 == 0) {
-  //   if (select_sprites == 1) {
-  //     createApples();
-  //   } else if (select_sprites == 2) {
-  //     createOrange();
-  //   }else {
-  //     createRed();
-  //   }
-  // }
-
-   if (frameCount % 80 == 0) {
-     if (select_sprites == 1) {
-       createApples();
-     } else if (select_sprites == 2) {
-     createOrange();
-     }else {
-       createRed();
-     }
-   }
-
-
+    
 
 }
 
-function createApples() {
-apple = createSprite(random(50, 350),40, 10, 10);
-apple.addImage(appleImg);
-apple.scale=0.07;
-apple.velocityY = 3;
-apple.lifetime = 150;
-  
-}
 
-function createOrange() {
-orangeL = createSprite(random(50, 350),40, 10, 10);
-orangeL.addImage(orangeImg);
-orangeL.scale=0.08;
-orangeL.velocityY = 3;
-orangeL.lifetime = 150;
-}
 
-function createRed() {
-redL = createSprite(random(50, 350),40, 10, 10);
-redL.addImage(redImg);
-redL.scale=0.06;
-  redL.velocityY = 3;
-  redL.lifetime = 150;
-}
